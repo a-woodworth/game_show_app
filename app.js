@@ -16,6 +16,7 @@ const ul = document.querySelector('#phrase ul');
 let missed = 0; 
 
 // Hide start game screen overlay
+startGameButton.style.cursor = 'pointer';
 startGameButton.addEventListener('click', (e) => {
   if (e.target.textContent === 'Start Game') {
     overlay.style.display = 'none';
