@@ -3,7 +3,7 @@ const phrase = document.getElementById('phrase');
 const startGameButton = document.querySelector('.btn__reset');
 const overlay = document.getElementById('overlay');
 const phrases = 
-  ['curiosity killed the cat',
+  ['when pigs fly',
   'wild goose chase',
   'break a leg',
   'raining cats and dogs',
@@ -18,25 +18,44 @@ let missed = 0;
 // Hide start game screen overlay
 startGameButton.style.cursor = 'pointer';
 startGameButton.addEventListener('click', (e) => {
-  if (e.target.textContent === 'Start Game') {
-    overlay.style.display = 'none';
-  }
+  overlay.style.display = 'none';
 });
 
 // Start game
-const phraseArray = getRandomPhraseArray(phrases);
+const phraseArray = getRandomPhraseAsArray(phrases);
 addPhraseToDisplay(phraseArray);
-console.log(phraseArray);
+
+keyboard.addEventListener('click', (e) => {
+  if (e.target.tagName === 'BUTTON') {
+    const letterClicked = e.target;
+
+    letterClicked.classList.add('chosen');
+    letterClicked.setAttribute('disabled', '');
+
+    const match = checkLetter(letterClicked);
+
+    if (match === null) {
+      missed++;
+
+      const lives= document.querySelectorAll('.tries img');
+      const lostLife = 5 - missed;
+
+      lives[lostLife].setAttribute('src', 'images/lostHeart.png');
+      console.log(lives);
+    }
+    // checkWin(); need to still write this
+  }
+});
 
 // Get random phrase from phrases array
-function getRandomPhraseArray(arr) {
-  randomPhrase = arr[Math.floor(Math.random() * arr.length)];
+function getRandomPhraseAsArray(arr) {
+  const randomPhrase = arr[Math.floor(Math.random() * arr.length)].split('');
   return randomPhrase;
 }
 
 // Setup game display
 function addPhraseToDisplay(arr) {
-  gameDisplay = arr;
+  const gameDisplay = arr;
   for(let i = 0; i < gameDisplay.length; i += 1) {
       let li = document.createElement('li');
       li.textContent = gameDisplay[i];
@@ -47,4 +66,22 @@ function addPhraseToDisplay(arr) {
           li.className = 'space';
       }
   }
+}
+
+// Check if player's selection matches letter in phrase
+function checkLetter(button) {
+  const letters = document.querySelectorAll('.letter');
+  let letterFound = null;
+  for (let i = 0; i < letters.length; i++) {
+    if (button.textContent === letters[i].textContent) {
+      letters[i].classList.add('show');
+      letters[i].style.transition = '1s ease-in';
+      letterFound = true;
+    }
+  } return letterFound;
+}
+
+// Check if player has won or lost game
+function checkWin() {
+
 }
