@@ -40,10 +40,9 @@ keyboard.addEventListener('click', (e) => {
       const lives= document.querySelectorAll('.tries img');
       const lostLife = 5 - missed;
 
-      lives[lostLife].setAttribute('src', 'images/lostHeart.png');
-      console.log(lives);
+      lives[lostLife].src =  'images/lostHeart.png';
     }
-    // checkWin(); need to still write this
+    checkWin();
   }
 });
 
@@ -83,5 +82,22 @@ function checkLetter(button) {
 
 // Check if player has won or lost game
 function checkWin() {
+  let lettersTotal = document.querySelectorAll('.letter');
+  let showTotal = document.querySelectorAll('.show');
+  let message = document.querySelector('.title');
 
+  if (lettersTotal.length === showTotal.length) {
+    overlay.style.display = 'flex';
+    overlay.className = 'win';
+    message.textContent = 'You won!';
+    // Add ability to restart game
+    startGameButton.textContent = 'Play again?';
+  } 
+  else if (missed >= 5) {
+    overlay.style.display = 'flex';
+    overlay.className = 'lose';
+    message.textContent = 'Sorry, you lost!';
+    // Add ability to restart game
+    startGameButton.textContent = 'Play again?';
+  }
 }
