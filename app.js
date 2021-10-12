@@ -36,7 +36,7 @@ keyboard.addEventListener('click', (e) => {
     if (match === null) {
       missed++;
 
-      const lives= document.querySelectorAll('.tries img');
+      const lives = document.querySelectorAll('.tries img');
       const lostLife = 5 - missed;
 
       lives[lostLife].src =  'images/lostHeart.png';
@@ -54,15 +54,16 @@ function getRandomPhraseAsArray(arr) {
 // Setup game display
 function addPhraseToDisplay(arr) {
   const gameDisplay = arr;
+
   for(let i = 0; i < gameDisplay.length; i += 1) {
-      let li = document.createElement('li');
-      li.textContent = gameDisplay[i];
-      ul.appendChild(li);
-      if (gameDisplay[i] != ' ') {
-          li.className = 'letter';
-      } else {
-          li.className = 'space';
-      }
+    let li = document.createElement('li');
+    li.textContent = gameDisplay[i];
+    ul.appendChild(li);
+    if (gameDisplay[i] != ' ') {
+        li.className = 'letter';
+    } else {
+        li.className = 'space';
+    }
   }
 }
 
@@ -70,6 +71,7 @@ function addPhraseToDisplay(arr) {
 function checkLetter(button) {
   const letters = document.querySelectorAll('.letter');
   let letterFound = null;
+
   for (let i = 0; i < letters.length; i++) {
     if (button.textContent === letters[i].textContent) {
       letters[i].classList.add('show');
@@ -89,18 +91,37 @@ function checkWin() {
     overlay.style.display = 'flex';
     overlay.className = 'win';
     message.textContent = 'You won!';
-  } else if (missed >= 5) {
+    playGameAgain();
+  } 
+  else if (missed >= 5) {
     overlay.style.display = 'flex';
     overlay.className = 'lose';
     message.textContent = 'Sorry, you lost!';
+    playGameAgain();
   }
-  playGameAgain();
 }
 
-// Reset game so player can play it again
+// Reset game
 function playGameAgain() {
   startGameButton.textContent = 'Play again?';
-  startGameButton.addEventListener('click', () => {
-  location.reload();
-  });
+
+  // Reset count, clear last phrase, and activate keyboard
+  missed = 0;
+  ul.textContent = '';
+  const priorGameLetters = document.querySelectorAll('.chosen');
+
+  for(let i = 0; i < priorGameLetters.length; i++) {
+    priorGameLetters[i].classList.remove('chosen');
+    priorGameLetters[i].disabled = false;
+  }
+
+  // Get new phrase
+  const phraseArray = getRandomPhraseAsArray(phrases);
+  addPhraseToDisplay(phraseArray);
+
+  // Refill lives
+  const hearts = document.querySelectorAll('.tries img');
+  for(i = 0; i < hearts.length; i++) {
+    hearts[i].src = 'images/liveHeart.png';
+  }
 }
