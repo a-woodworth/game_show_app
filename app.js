@@ -11,7 +11,6 @@ const phrases =
   ];
 const ul = document.querySelector('#phrase ul');
 
-
 // Track number of wrong guesses. Player loses game after guessing wrong 5 times.
 let missed = 0; 
 
@@ -90,14 +89,18 @@ function checkWin() {
     overlay.style.display = 'flex';
     overlay.className = 'win';
     message.textContent = 'You won!';
-    // Add ability to restart game
-    startGameButton.textContent = 'Play again?';
-  } 
-  else if (missed >= 5) {
+  } else if (missed >= 5) {
     overlay.style.display = 'flex';
     overlay.className = 'lose';
     message.textContent = 'Sorry, you lost!';
-    // Add ability to restart game
-    startGameButton.textContent = 'Play again?';
   }
+  playGameAgain();
+}
+
+// Reset game so player can play it again
+function playGameAgain() {
+  startGameButton.textContent = 'Play again?';
+  startGameButton.addEventListener('click', () => {
+  location.reload();
+  });
 }
